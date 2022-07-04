@@ -6,10 +6,14 @@
 # Pajamu ketvircio rezultatus
 # Pusmecio islaidu rezultatus
 
+#viska suloginti 
+
 import logging
+from datetime import date, datetime
 
 logging.basicConfig(filename='mini_budget.log', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
+ACCOUNT_FILE = "accounting.txt"
 
 class Accountant:
     def monthly_average(self, amount: float) -> float:
@@ -39,15 +43,25 @@ class Expenses(Accountant):
 def main() -> None:
     income = float(input("Enter your yearly income: "))
     expenses = float(input("Enter your yearly expenses: "))
+    write_info_to_file(f"Accounting year: {datetime.now().year}, \n ")
+    write_info_to_file(f"Our yearly income: {income}, \n ")
+    write_info_to_file(f"Our yearly expenses: {expenses}, \n ")
     logging.info(f"Log income amount {income}")
     logging.info(f"Log expenses amount {expenses}")
     inc = Income(income)
     exp = Expenses(expenses)
+    write_info_to_file(f"Our quaterly income: {inc.quarter_income()}, \n ")
+    write_info_to_file(f"Our daily expenses: {inc.daily_average(expenses)}, \n ")
+    
+    
     print(f"Quarter income is: {inc.quarter_income()}")
     print(f"Daily average of expenses is: {inc.daily_average(expenses)}")
+  
     
-
-
+def write_info_to_file(data:str) -> None:
+    with open(ACCOUNT_FILE, 'a') as f:
+        f.write(data)
+        
 if __name__=='__main__':
     main()
-    
+ 
